@@ -33,7 +33,7 @@ public class Model extends Observable {
             }
         }
         if (aux == null){
-            JOptionPane.showMessageDialog(null,"No hay ese coche.");
+        View.noHay();
         }
         else {
             return aux;

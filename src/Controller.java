@@ -28,7 +28,7 @@ public class Controller {
          */
         Coche aux = miModelo.crearCoche(modelo, matricula, velocidad);
         if (aux != null) {
-        JOptionPane.showMessageDialog(null,"Coche creado!");
+        miVista.creado();
         miVista.mostrarCoche(aux.modelo, aux.matricula, aux.velocidad);
         }
     }
@@ -38,8 +38,8 @@ public class Controller {
          * @param v es el input que dirá cuanta velocidad ganó.
          * Estos serán usados para llamar al método acelerar en modelo.
          */
-        String m = JOptionPane.showInputDialog(null,"dime la matricula");
-        int v = Integer.parseInt(JOptionPane.showInputDialog(null,"Cuanto aceleró?"));
+        String m = miVista.pedir("dime la matricula");
+        int v = Integer.parseInt(miVista.pedir("Cuanto aceleró?"));
         miModelo.acelerar(m,v);
     }
     public void frenar(){
@@ -48,8 +48,8 @@ public class Controller {
          * @param v es el input que dirá cuanta velocidad ganó.
          * Estos serán usados para llamar al método frenar en modelo.
          */
-        String m = JOptionPane.showInputDialog(null,"dime la matricula.");
-        int v = Integer.parseInt(JOptionPane.showInputDialog(null,"Cuanto frenó?"));
+        String m = miVista.pedir("dime la matricula");
+        int v = Integer.parseInt(miVista.pedir("Cuanto frenó?"));
         miModelo.frenar(m,v);
     }
     public void filtro(){
@@ -59,7 +59,7 @@ public class Controller {
          * Llamaremos al modelo,matricula y velocidad del coche con el metodo en vista que los saca por pantalla.
          * @return modelo matricula y velocidad de aux.
          */
-        String m = JOptionPane.showInputDialog(null,"dime la matricula.");
+        String m = miVista.pedir("dime la matricula");
         Coche aux = miModelo.getCoche(m);
         miVista.mostrarCoche(aux.modelo, aux.matricula, aux.velocidad);
     }

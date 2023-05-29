@@ -11,6 +11,7 @@ Controller-->Model
 Controller-->View
 Model-->Coche
 Model-->Oteador
+Model-->View : Si getCoche no de resultado. 
 Oteador-->View
 View-->Dialog
 View-->IU
@@ -27,6 +28,9 @@ Model: acelerar()
 Model: frenar()
 Model: todos()
 View: IU()
+View: creado()
+View: noHay()
+View: pedir()
 View: mostrarCoche()
 View: aviso()
 Coche: String modelo
@@ -58,11 +62,14 @@ sequenceDiagram
     Model->>Oteador:MiModelo.addObserver(MiObserver)
     Controller->>View: main MiVista()
     View->>IU: IU.crear
-    Controller->>Model: crearCoche()
+    Controller->>Model: construir()
     activate Model
     Model -->>Controller: return aux
     deactivate Model
-    Controller->>Controller: JOPane (coche creado!)
+    Controller-->>View: creado()
+    activate View
+    View-->>Controller: JOPane(coche creado!)
+    deactivate View
     Controller->>View: MiVista.mostrarCoche
     activate View
     View-->>Dialog: mostrarCoche()
@@ -71,8 +78,12 @@ sequenceDiagram
     deactivate Dialog
     deactivate View
     activate Controller
-    Controller-->>Controller: JOPane (m)
-    Controller-->>Controller: JOPane (v)
+    Controller-->>View: MiVista.pedir()
+    activate View
+    View-->>Controller: JOPane(m)
+    Controller-->>View: MiVista.pedir()
+    View-->>Controller: JOPane(m)
+    deactivate View
     Controller->>Model: acelerar(m,v)
     deactivate Controller
     activate Model
@@ -87,9 +98,13 @@ sequenceDiagram
     Dialog-->>View: main(m)
     deactivate Dialog
     deactivate View
-     activate Controller
-    Controller-->>Controller: JOPane (m)
-    Controller-->>Controller: JOPane (v)
+    activate Controller
+    Controller-->>View: MiVista.pedir()
+    activate View
+    View-->>Controller: JOPane(m)
+    Controller-->>View: MiVista.pedir()
+    View-->>Controller: JOPane(m)
+    deactivate View
     Controller->>Model: frenar(m,v)
     deactivate Controller
     activate Model
@@ -105,11 +120,18 @@ sequenceDiagram
     deactivate Dialog
     deactivate View
     activate Controller
-    Controller-->Controller: JOPane (m)
+    Controller-->View: MiVista.pedir()
+    activate View
+    View-->Controller: JOPane(m)
+    deactivate View
     Controller->>Model: getcoche(m)
     activate Model
-    Model-->>Controller: return aux
-    deactivate Model
+    Model-->>View: en caso de que aux sea nulo. View.NoHay()
+    activate View
+    View-->>Controller: JOPane(No hay coche)
+    deactivate View
+    Model-->>Controller: return aux    
+    deactivate Model    
     Controller->>View: MiVista.mostrarCoche()
     deactivate Controller
     activate View
