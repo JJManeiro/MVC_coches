@@ -7,65 +7,121 @@ Aplicación que trabaja con objetos coches, modifica la velocidad y la muestra
 
 ```mermaid
 classDiagram
-    class Coche {
-        String: matricula
-        String: modelo
-        Integer: velocidad
-    }
-      class Controller{
-          +main()
-      }
-      class View {+muestraVelocidad(String, Integer)}
-      class Model {
-          ArrayList~Coche~: parking
-          +crearCoche(String, String, String)
-          +getCoche(String)
-          +cambiarVelocidad(String, Integer)
-          +getVelocidad(String)
-      }
-    Controller "1" *-- "1" Model : association
-    Controller "1" *-- "1" View : association
-    Model "1" *-- "1..n" Coche : association
-      
+Controller-->Model
+Controller-->View
+Model-->Coche
+Model-->Oteador
+Oteador-->View
+View-->Dialog
+View-->IU
+IU-->Controller
+Controller: main()
+Controller: construir()
+Controller: acelerar()
+Controller: frenar()
+Controller: filtro()
+Controller: todos() 
+Model: crearCoche()
+Model: getCoche()
+Model: acelerar()
+Model: frenar()
+Model: todos()
+View: IU()
+View: mostrarCoche()
+View: aviso()
+Coche: String modelo
+Coche: String matricula
+Coche: int velocidad
+Coche: coche()
+Oteador: update()
+IU: IU()
+IU: crear()
+Dialog: Dialog()
+Dialog: Main()
 ```
 
 ---
 
 ## Diagrama de Secuencia
-
-Ejemplo básico del procedimiento, sin utilizar los nombres de los métodos
-
+El diagrama de secuencia con todos los métodos de controller y comose relacionan con los demás.
 
 ```mermaid
 sequenceDiagram
     participant Model
     participant Controller
     participant View
-    Controller->>Model: Puedes crear un coche?
+    participant Oteador
+    participant Dialog
+    participant IU
+    Controller->>Model: main MiModelo()
+    Controller->>Oteador: main MiObserver()
+    Model->>Oteador:MiModelo.addObserver(MiObserver)
+    Controller->>View: main MiVista()
+    View->>IU: IU.crear
+    Controller->>Model: crearCoche()
     activate Model
-    Model-->>Controller: Creado!
+    Model -->>Controller: return aux
     deactivate Model
-    Controller->>+View: Muestra la velocidad, porfa
+    Controller->>Controller: JOPane (coche creado!)
+    Controller->>View: MiVista.mostrarCoche
     activate View
-    View->>-View: Mostrando velocidad
-    View-->>Controller: Listo!
+    View-->>Dialog: mostrarCoche()
+    activate Dialog
+    Dialog-->>View: main(mensaje)
+    deactivate Dialog
     deactivate View
-```
-
-El mismo diagrama con los nombres de los métodos
-
-```mermaid
-sequenceDiagram
-    participant Model
-    participant Controller
-    participant View
-    Controller->>Model: crearCoche("Mercedes", "BXK 1234")
+    activate Controller
+    Controller-->>Controller: JOPane (m)
+    Controller-->>Controller: JOPane (v)
+    Controller->>Model: acelerar(m,v)
+    deactivate Controller
     activate Model
-    Model-->>Controller: Coche
+    Model-->>Oteador: notifyObservers()
     deactivate Model
-    Controller->>+View: muestraVelocidad("BXK 1234", velocidad)
+    activate Oteador
+    Oteador-->>View: update()
+    deactivate Oteador
     activate View
-    View->>-View: System.out.println()
-    View-->>Controller: boolean
+    View-->>Dialog: aviso(m)
+    activate Dialog
+    Dialog-->>View: main(m)
+    deactivate Dialog
     deactivate View
+     activate Controller
+    Controller-->>Controller: JOPane (m)
+    Controller-->>Controller: JOPane (v)
+    Controller->>Model: frenar(m,v)
+    deactivate Controller
+    activate Model
+    Model-->>Oteador: notifyObservers()
+    deactivate Model
+    activate Oteador
+    Oteador-->>View: update()
+    deactivate Oteador
+    activate View
+    View-->>Dialog: aviso(m)
+    activate Dialog
+    Dialog-->>View: main(m)
+    deactivate Dialog
+    deactivate View
+    activate Controller
+    Controller-->Controller: JOPane (m)
+    Controller->>Model: getcoche(m)
+    activate Model
+    Model-->>Controller: return aux
+    deactivate Model
+    Controller->>View: MiVista.mostrarCoche()
+    deactivate Controller
+    activate View
+    View-->>Dialog: mostrarCoche()
+    activate Dialog
+    Dialog-->>View: main(mensaje)
+    deactivate Dialog
+    deactivate View
+    activate Controller
+    Controller->>Model: MiModelo.todos()
+    deactivate Controller
+    activate Model
+    Model-->>Controller: foreach(){sout ArrayList parking}
+    deactivate Model    
 ```
