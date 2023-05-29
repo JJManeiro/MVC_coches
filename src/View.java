@@ -21,10 +21,19 @@ public class View  {
        else if (Velocidad<0){
            mensaje = "El coche "+modelo+" "+matricula+ " está yendo "+(-Velocidad)+" km/h hacia atrás.";
        }
+       else if (Velocidad>120){
+           mensaje = "El coche"+modelo+" "+matricula+" esta yendo demasiado rápido!"+"("+Velocidad+" km/h.)";
+        }
        else {
            mensaje = "El coche "+modelo+" "+matricula+" va a "+Velocidad+" km/h.";
        }
-       JOptionPane.showMessageDialog(null,mensaje);
+       Dialog D = new Dialog();
+       D.main(mensaje);
        return null;
+   }
+   public static String aviso(String m){
+        Dialog D = new Dialog();
+        D.main(m);
+        return null;
    }
 }
